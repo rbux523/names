@@ -173,7 +173,8 @@
     action.className = 'player-action';
     action.textContent = isSelected ? '−' : '+';
     action.setAttribute('aria-hidden', 'true');
-    card.addEventListener('click', (event) => {
+    card.addEventListener('click', () => {
+      card.blur();
       togglePlayer(player.name);
     });
     card.append(image, copy, action);

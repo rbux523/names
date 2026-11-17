@@ -82,7 +82,7 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .draw-topbar, .group-topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .draw-topbar { position: relative; z-index: 3; width: 100vw; flex: 0 0 auto; margin-top: calc(-1 * max(12px, env(safe-area-inset-top))); padding: max(12px, env(safe-area-inset-top)) max(11px, calc((100vw - 760px) / 2)) 8px; background: #08090c; }
 .top-actions { display: flex; align-items: center; gap: 7px; }
-.group-nav { height: 38px; min-height: 38px; flex: 0 0 auto; padding: 6px 10px; border-color: #ffffff20; background: #ffffff08; color: #efeff3; font-size: 12px; }
+.group-nav { height: 38px; min-height: 38px; flex: 0 0 auto; padding: 6px 10px; border-color: #ffffff20; background: #ffffff08; color: #efeff3; font-size: 14px; }
 .group-nav:hover { background: #ffffff14; }
 .nav-count { display: grid; min-width: 20px; height: 20px; place-items: center; padding: 0 5px; border-radius: 99px; background: #ffffff14; font-size: 10px; }
 .draw-stage { position: absolute; z-index: 0; inset: 0; display: flex; width: 100%; min-height: 0; flex-direction: column; align-items: stretch; justify-content: stretch; }
@@ -106,7 +106,7 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .result { min-height: 22px; margin: 9px 0 13px; color: var(--muted); font-size: 13px; }
 .draw-button { width: min(100%, 360px); min-height: 52px; padding: 12px 20px; border: 0; color: #080808; background: var(--rainbow); background-size: 250% 100%; background-position: 0% 50%; animation: rainbow-flow 4s ease-in-out infinite alternate; font-size: 16px; box-shadow: 0 7px 28px #d98bff20; }
 .draw-button:hover:not(:disabled), .add-button:hover:not(:disabled) { transform: translateY(-2px); }
-.draw-reset-button { display: inline-flex; height: 38px; min-height: 38px; align-items: center; justify-content: center; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: #ffffff08; color: #c7c7ce; cursor: pointer; font-size: 12px; font-weight: 750; }
+.draw-reset-button { display: inline-flex; height: 38px; min-height: 38px; align-items: center; justify-content: center; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: #ffffff08; color: #c7c7ce; cursor: pointer; font-size: 14px; font-weight: 750; }
 .draw-reset-button:hover:not(:disabled) { background: #202024; }
 .button-icon { font-size: 20px; line-height: 1; }
 .draw-bottom { position: relative; z-index: 3; display: flex; width: 100vw; flex: 0 0 auto; flex-direction: column; gap: 0; margin: auto 0 0; padding-bottom: max(9px, env(safe-area-inset-bottom)); background: #08090c; }
@@ -121,8 +121,8 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .history-empty { flex: 1 0 100%; padding: 3px 0; color: #777780; text-align: center; font-size: 11px; }
 .history-chip { display: inline-flex; min-width: 0; align-items: center; gap: 4px; padding: 3px 6px; border: 1px solid #ffffff14; border-radius: 99px; background: #ffffff07; }
 .history-chip { flex: 0 0 auto; }
-.history-chip img { width: 17px; height: 17px; flex: 0 0 auto; object-fit: contain; }
-.history-name { overflow: hidden; font-size: 10px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
+.history-chip img { width: 24px; height: 24px; flex: 0 0 auto; object-fit: contain; }
+.history-name { overflow: hidden; font-size: 14px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Group selector */
 .group-screen { width: 100%; min-height: 100vh; min-height: 100dvh; overflow: visible; }
@@ -154,15 +154,17 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .list-meta { display: flex; justify-content: space-between; gap: 10px; margin: 0 1px 9px; color: #81818a; font-size: 11px; }
 .player-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 1px 3px 1px 1px; }
 .player-card { position: relative; display: flex; min-width: 0; align-items: center; gap: 9px; padding: 9px 34px 9px 10px; border: 1px solid #29292e; border-radius: 13px; background: #0a0a0c80; color: inherit; cursor: pointer; font: inherit; text-align: left; backdrop-filter: blur(2px); transition: border-color .15s, background .15s, opacity .15s; }
-.player-card:hover { border-color: #575760; background: #10101399; }
 .player-card.selected { border-color: #77717e; background: #17151a99; }
 .player-card:disabled { opacity: 1; cursor: not-allowed; }
 .player-card.drawn { opacity: .55; }
-.avatar { width: 36px; height: 36px; flex: 0 0 auto; object-fit: contain; }
+.avatar { width: 44px; height: 44px; flex: 0 0 auto; object-fit: contain; }
 .player-copy { min-width: 0; flex: 1; }
-.player-name { display: block; overflow: hidden; font-size: 13px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.player-name { display: block; overflow: hidden; font-size: 14px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
 .player-action { position: absolute; top: 5px; right: 5px; display: grid; width: 19px; height: 19px; place-items: center; padding: 0; border: 0; border-radius: 0; background: transparent; color: #eeeeF2; cursor: pointer; font-size: 14px; line-height: 1; }
 .player-action:hover:not(:disabled) { background: #ffffff1a; }
+@media (hover: hover) and (pointer: fine) {
+  .player-card:hover { border-color: #575760; background: #10101399; }
+}
 .selected-empty { padding-block: 16px; border: 1px dashed #ffffff20; border-radius: 12px; }
 .empty-list { grid-column: 1 / -1; padding: 25px 10px; color: var(--muted); text-align: center; font-size: 13px; }
 .notice { margin: 13px 0 0; color: #888891; text-align: center; font-size: 11px; line-height: 1.5; }
@@ -175,7 +177,7 @@ button:disabled { cursor: not-allowed; opacity: .44; }
   .draw-topbar .brand-mark { width: 23px; height: 23px; font-size: 14px; }
   .draw-topbar .brand h1 { font-size: clamp(20px, 5.5vw, 25px); }
   .top-actions { gap: 4px; }
-  .draw-reset-button, .group-nav { height: 32px; min-height: 32px; gap: 4px; padding: 4px 7px; font-size: 10px; }
+  .draw-reset-button, .group-nav { height: 32px; min-height: 32px; gap: 3px; padding: 4px 5px; font-size: 12px; }
   .nav-count { min-width: 17px; height: 17px; padding-inline: 3px; }
   .draw-controls { width: 100%; }
   .result { margin: 4px 0 8px; }
@@ -186,14 +188,14 @@ button:disabled { cursor: not-allowed; opacity: .44; }
   .roster-panel { padding: 8px 0; }
   .player-list { gap: 6px; }
   .player-card { gap: 7px; padding: 8px 30px 8px 7px; }
-  .avatar { width: 32px; height: 32px; }
+  .avatar { width: 40px; height: 40px; }
   .selection-tools { gap: 5px; }
   .secondary-button { padding-inline: 9px; font-size: 11px; }
   .tools { gap: 6px; }
   .history-panel { padding-top: 6px; }
   .history-chip { gap: 3px; padding: 2px 5px; }
-  .history-chip img { width: 15px; height: 15px; }
-  .history-name { font-size: 9px; }
+  .history-chip img { width: 22px; height: 22px; }
+  .history-name { font-size: 14px; }
 }
 @media (max-width: 370px) {
   .selection-tools { grid-column: 1 / -1; }
