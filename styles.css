@@ -2,7 +2,7 @@
   color-scheme: dark;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #f7f7f7;
-  background: #050505;
+  background: #050507;
   font-synthesis: none;
   --muted: #9b9ba3;
   --line: #29292e;
@@ -15,15 +15,19 @@
 html, body { width: 100%; height: 100%; margin: 0; }
 body {
   min-width: 320px;
-  background: radial-gradient(ellipse at 50% -18%, #20202b 0, #0b0b0e 34%, #050505 67%);
+  background: #050507;
   color: #f7f7f7;
 }
 body[data-page="draw"] { overflow: hidden; }
 body[data-page="group"] { overflow-x: hidden; overflow-y: auto; }
 body[data-page="draw"] > .draw-screen, body[data-page="group"] > .group-screen { position: relative; z-index: 1; }
 .ambient-sky { position: fixed; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
-.shooting-star { position: absolute; width: var(--star-length, clamp(90px, 24vw, 190px)); height: var(--star-width, 2px); border-radius: 50%; opacity: 0; background: linear-gradient(90deg, transparent, var(--star-color) 45%, #fff 100%); box-shadow: 0 0 8px 1px var(--star-color); transform-origin: left center; animation: star-flight var(--flight-time) linear forwards; }
-.shooting-star::after { position: absolute; top: 50%; right: 0; width: 5px; height: 5px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px 3px var(--star-color); content: ""; transform: translate(50%, -50%); }
+.draw-screen > .ambient-sky { z-index: 2; }
+.ambient-star { position: absolute; width: var(--star-size, 2px); height: var(--star-size, 2px); border-radius: 50%; background: var(--star-color, #e6e9ff); opacity: var(--star-opacity, .55); box-shadow: 0 0 5px var(--star-color, #e6e9ff); }
+.ambient-star.twinkle { animation: star-twinkle var(--twinkle-time, 5s) ease-in-out infinite alternate; }
+@keyframes star-twinkle { from { opacity: .2; } to { opacity: .85; } }
+.shooting-star { position: absolute; width: var(--star-length, 120px); height: var(--star-width, 2px); border-radius: 50%; opacity: 0; background: linear-gradient(90deg, transparent, var(--star-color) 45%, #fff 100%); box-shadow: 0 0 8px 1px var(--star-color); transform-origin: left center; animation: star-flight var(--flight-time, 2.5s) linear forwards; }
+.shooting-star::after { position: absolute; top: 50%; right: 0; width: 4px; height: 4px; border-radius: 50%; background: #fff; box-shadow: 0 0 9px 3px var(--star-color); content: ""; transform: translate(50%, -50%); }
 @keyframes star-flight {
   0% { opacity: 0; transform: translate(0, 0) rotate(var(--star-angle)) scaleX(.15); }
   12% { opacity: .8; transform: translate(0, 0) rotate(var(--star-angle)) scaleX(1); }
@@ -80,7 +84,7 @@ button:disabled { cursor: not-allowed; opacity: .44; }
   padding: max(12px, env(safe-area-inset-top)) 16px 0;
 }
 .draw-topbar, .group-topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.draw-topbar { position: relative; z-index: 3; width: 100vw; flex: 0 0 auto; margin-top: calc(-1 * max(12px, env(safe-area-inset-top))); padding: max(12px, env(safe-area-inset-top)) max(11px, calc((100vw - 760px) / 2)) 8px; background: #08090c; }
+.draw-topbar { position: relative; z-index: 4; width: 100vw; flex: 0 0 auto; margin-top: calc(-1 * max(12px, env(safe-area-inset-top))); padding: max(12px, env(safe-area-inset-top)) max(11px, calc((100vw - 760px) / 2)) 8px; background: #08090c; }
 .top-actions { display: flex; align-items: center; gap: 7px; }
 .group-nav { height: 38px; min-height: 38px; flex: 0 0 auto; padding: 6px 10px; border-color: #ffffff20; background: #ffffff08; color: #efeff3; font-size: 14px; }
 .group-nav:hover { background: #ffffff14; }
@@ -90,8 +94,8 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .panel-label { margin: 0 0 10px; color: var(--muted); font-size: 11px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
 .reel { position: relative; display: grid; width: 100%; height: 100%; min-height: 0; flex: 1 1 auto; place-items: center; overflow: hidden; isolation: isolate; }
 .reel::before, .reel::after { position: absolute; z-index: 1; right: 0; left: 0; height: clamp(42px, 10svh, 100px); content: ""; pointer-events: none; }
-.reel::before { top: 0; background: linear-gradient(#08090c, transparent); }
-.reel::after { bottom: 0; background: linear-gradient(transparent, #08090c); }
+.reel::before { top: 0; background: linear-gradient(#050507, transparent); }
+.reel::after { bottom: 0; background: linear-gradient(transparent, #050507); }
 .reel-track { position: absolute; z-index: 0; top: 0; left: 0; width: 100%; will-change: transform; }
 .selection-window { position: absolute; z-index: 2; top: var(--selection-center, 50%); right: 8px; left: 8px; height: 82px; border: 1px solid #ffffff36; border-radius: 17px; background: #ffffff10; box-shadow: inset 0 0 25px #ffffff08, 0 0 30px #a88cff12; transform: translateY(-50%); pointer-events: none; }
 .reel-row { display: flex; height: 82px; align-items: center; justify-content: center; gap: 10px; padding: 0 14px; font-size: clamp(28px, 8vw, 48px); font-weight: 850; letter-spacing: -.035em; }
@@ -109,7 +113,7 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .draw-reset-button { display: inline-flex; height: 38px; min-height: 38px; align-items: center; justify-content: center; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: #ffffff08; color: #c7c7ce; cursor: pointer; font-size: 14px; font-weight: 750; }
 .draw-reset-button:hover:not(:disabled) { background: #202024; }
 .button-icon { font-size: 20px; line-height: 1; }
-.draw-bottom { position: relative; z-index: 3; display: flex; width: 100vw; flex: 0 0 auto; flex-direction: column; gap: 0; margin: auto 0 0; padding-bottom: max(9px, env(safe-area-inset-bottom)); background: #08090c; }
+.draw-bottom { position: relative; z-index: 4; display: flex; width: 100vw; flex: 0 0 auto; flex-direction: column; gap: 0; margin: auto 0 0; padding-bottom: max(9px, env(safe-area-inset-bottom)); background: #08090c; }
 .draw-controls { position: relative; width: 100%; flex: 0 0 auto; padding: 0 max(11px, calc((100vw - 560px) / 2)); background: transparent; text-align: center; }
 .load-error { margin-top: 10px; padding: 12px; border: 1px solid #6b4545; border-radius: 12px; color: #ffc0c0; background: #241313; font-size: 12px; line-height: 1.5; }
 .history-panel { position: relative; width: 100%; flex: 0 0 auto; margin: 0; padding: 8px max(11px, calc((100vw - 760px) / 2)) 2px; border-top: 1px solid #ffffff18; background: transparent; }

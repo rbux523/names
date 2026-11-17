@@ -44,40 +44,54 @@
   function initAmbientSky() {
     const sky = document.querySelector('.ambient-sky');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!sky || reducedMotion.matches) return;
-    const colors = ['#ff647c', '#ffb454', '#ffe56d', '#70e6b0', '#69caff', '#a88cff', '#ff79d2'];
+    if (!sky) return;
+    const colors = ['#e8edff', '#dce8ff', '#fff1db', '#d9d4ff'];
+    const starCount = Math.min(150, Math.max(75, Math.round(window.innerWidth * window.innerHeight / 5000)));
 
-    function scheduleStar() {
-      if (document.hidden || reducedMotion.matches) return;
+    for (let index = 0; index < starCount; index++) {
       const star = document.createElement('span');
-      star.className = 'shooting-star';
+      star.className = `ambient-star${!reducedMotion.matches && Math.random() < 0.35 ? ' twinkle' : ''}`;
       star.style.left = `${Math.random() * 100}%`;
       star.style.top = `${Math.random() * 100}%`;
       star.style.setProperty('--star-color', colors[Math.floor(Math.random() * colors.length)]);
+      star.style.setProperty('--star-size', `${1 + Math.random() * 1.25}px`);
+      star.style.setProperty('--star-opacity', `${0.25 + Math.random() * 0.5}`);
+      star.style.setProperty('--twinkle-time', `${4 + Math.random() * 6}s`);
+      sky.append(star);
+    }
+
+    const streakColors = ['#ff647c', '#ffb454', '#ffe56d', '#70e6b0', '#69caff', '#a88cff', '#ff79d2'];
+    function scheduleStreak() {
+      if (document.hidden || reducedMotion.matches) return;
+      const streak = document.createElement('span');
+      streak.className = 'shooting-star';
+      streak.style.left = `${Math.random() * 100}%`;
+      streak.style.top = `${Math.random() * 100}%`;
+      streak.style.setProperty('--star-color', streakColors[Math.floor(Math.random() * streakColors.length)]);
       const angle = Math.random() * 360;
       const radians = angle * Math.PI / 180;
       const distance = 110 + Math.random() * 230;
-      star.style.setProperty('--star-angle', `${angle}deg`);
-      star.style.setProperty('--star-dx', `${Math.cos(radians) * distance}px`);
-      star.style.setProperty('--star-dy', `${Math.sin(radians) * distance}px`);
-      star.style.setProperty('--star-length', `${55 + Math.random() * 150}px`);
-      star.style.setProperty('--star-width', `${1 + Math.random() * 2.5}px`);
-      star.style.setProperty('--flight-time', `${1.8 + Math.random() * 2.2}s`);
-      star.addEventListener('animationend', () => star.remove(), { once: true });
-      sky.append(star);
-      ambientTimer = window.setTimeout(scheduleStar, 380 + Math.random() * 780);
+      streak.style.setProperty('--star-angle', `${angle}deg`);
+      streak.style.setProperty('--star-dx', `${Math.cos(radians) * distance}px`);
+      streak.style.setProperty('--star-dy', `${Math.sin(radians) * distance}px`);
+      streak.style.setProperty('--star-length', `${55 + Math.random() * 150}px`);
+      streak.style.setProperty('--star-width', `${1 + Math.random() * 1.5}px`);
+      streak.style.setProperty('--flight-time', `${1.8 + Math.random() * 2.2}s`);
+      streak.addEventListener('animationend', () => streak.remove(), { once: true });
+      sky.append(streak);
+      ambientTimer = window.setTimeout(scheduleStreak, 600 + Math.random() * 1100);
     }
 
     document.addEventListener('visibilitychange', () => {
       window.clearTimeout(ambientTimer);
-      if (!document.hidden && !reducedMotion.matches) scheduleStar();
+      if (!document.hidden && !reducedMotion.matches) scheduleStreak();
     });
     reducedMotion.addEventListener?.('change', () => {
       window.clearTimeout(ambientTimer);
-      sky.replaceChildren();
-      if (!reducedMotion.matches && !document.hidden) scheduleStar();
+      sky.querySelectorAll('.shooting-star').forEach((streak) => streak.remove());
+      if (!reducedMotion.matches && !document.hidden) scheduleStreak();
     });
-    scheduleStar();
+    scheduleStreak();
   }
 
   function createPlayer(name, data = {}) {
