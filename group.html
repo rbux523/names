@@ -4,37 +4,44 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#050505">
-  <title>Choose Group · Name Draw</title>
+  <title>Choose Group · Name Picker</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
 <body data-page="group">
+  <div class="ambient-sky" aria-hidden="true"></div>
   <main class="group-screen">
     <div class="group-app">
       <header class="group-topbar">
-        <a class="secondary-button back-button" href="index.html">← Drawing</a>
+        <a class="secondary-button back-button" href="index.html">← Name Picker</a>
         <h1 class="group-title"><span class="rainbow-text">Choose group</span></h1>
         <button class="reset-button" id="reset-button" type="button" disabled>↻ Start over</button>
       </header>
 
-      <p class="group-status" id="group-status" aria-live="polite">Select players to include in the draw.</p>
+      <p class="group-status" id="group-status" aria-live="polite">Select players to include in the picker.</p>
       <section class="roster-panel" aria-labelledby="roster-title">
         <div class="roster-heading">
-          <div><h2 id="roster-title">Players</h2><p>Select who can be drawn.</p></div>
+          <div><h2 id="roster-title">Selected players</h2><p>These players are in your group.</p></div>
           <span class="count-badge" id="selected-count">0 selected</span>
+        </div>
+        <div class="player-list selected-list" id="selected-list" aria-label="Selected players"></div>
+
+        <div class="library-divider">
+          <div><h2>Player library</h2><p>Add names to your group.</p></div>
+          <span class="list-count" id="list-count">Loading players…</span>
         </div>
         <div class="tools">
           <label class="search-wrap"><span class="sr-only">Search players</span><span class="search-icon" aria-hidden="true">⌕</span><input id="search-input" class="search-input" type="search" placeholder="Search players…" autocomplete="off"></label>
-          <div class="selection-tools"><button class="secondary-button" id="select-all" type="button">Select all</button><button class="secondary-button" id="clear-all" type="button">Clear</button></div>
+          <div class="selection-tools"><button class="secondary-button" id="clear-all" type="button">Clear all</button></div>
         </div>
         <form class="add-form" id="add-form">
           <label class="sr-only" for="add-input">Add a player</label>
-          <input class="add-input" id="add-input" type="text" maxlength="40" placeholder="Add a player name…" autocomplete="off">
-          <button class="add-button" type="submit">＋ Add player</button>
+          <input class="add-input" id="add-input" type="text" maxlength="40" placeholder="New name" autocomplete="off">
+          <button class="add-button" type="submit">＋ Add name</button>
         </form>
-        <div class="list-meta"><span id="list-count">Loading players…</span><span>New players use the default icon</span></div>
-        <div class="player-list" id="player-list" aria-label="Available players"></div>
-        <p class="notice" id="group-notice">Your group is saved on this device. After drawing starts, use Start over to restore the group and make edits.</p>
+        <div class="list-meta"><span>Choose Add to move a name into your group.</span><span>New players use the default icon</span></div>
+        <div class="player-list library-list" id="player-list" aria-label="Available players"></div>
+        <p class="notice" id="group-notice">Your group is saved on this device. After picking starts, use Start over to restore the group and make edits.</p>
       </section>
     </div>
   </main>
