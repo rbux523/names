@@ -14,7 +14,8 @@
     originalGroup: null,
     remaining: [],
     history: [],
-    pendingDraw: null
+    pendingDraw: null,
+    lastReel: null
   };
 
   const els = {
@@ -281,7 +282,7 @@
     });
   }
 
-  function renderReelRows(names, winnerIndex) {
+  function renderReelRows(names, winnerIndex, animate = true) {
     els.track.replaceChildren();
     const fragment = document.createDocumentFragment();
     names.forEach((player, index) => {
@@ -304,7 +305,12 @@
     const reelBounds = els.reel.getBoundingClientRect();
     const selectionBounds = els.selection.getBoundingClientRect();
     const centerOffset = selectionBounds.top + selectionBounds.height / 2 - reelBounds.top - ROW_HEIGHT / 2;
-    els.track.style.transform = `translateY(${centerOffset}px)`;
+    const winnerOffset = centerOffset - winnerIndex * ROW_HEIGHT;
+    els.track.style.transform = `translateY(${animate ? centerOffset : winnerOffset}px)`;
+    if (!animate) {
+      els.track.style.transform = `translateY(${winnerOffset}px)`;
+      return;
+    }
     const endAt = state.pendingDraw?.endAt;
     if (endAt === undefined) return;
     void els.track.offsetHeight;
@@ -340,16 +346,20 @@
   function startAnimation(winnerName) {
     const winner = players.get(winnerName);
     if (!winner) return;
-    const cycle = shuffled(state.remaining);
-    const rowCount = Math.max(42, state.remaining.length + 18);
-    const winnerIndex = rowCount - 10;
-    const winnerOffset = cycle.indexOf(winnerName);
-    const startOffset = (winnerOffset - winnerIndex % cycle.length + cycle.length) % cycle.length;
-    const rows = Array.from({ length: rowCount }, (_, index) => {
-      const name = cycle[(startOffset + index) % cycle.length];
-      return players.get(name);
-    });
-    renderReelRows(rows, winnerIndex);
+    let reel = state.lastReel;
+    if (!reel || reel.winnerName !== winnerName || !Array.isArray(reel.names) || reel.names.some((name) => !players.has(name))) {
+      const cycle = shuffled(state.remaining);
+      const rowCount = Math.max(42, state.remaining.length + 18);
+      const winnerIndex = rowCount - 10;
+      const winnerOffset = cycle.indexOf(winnerName);
+      const startOffset = (winnerOffset - winnerIndex % cycle.length + cycle.length) % cycle.length;
+      const names = Array.from({ length: rowCount }, (_, index) => cycle[(startOffset + index) % cycle.length]);
+      reel = { names, winnerIndex, winnerName };
+      state.lastReel = reel;
+      saveState();
+    }
+    const rows = reel.names.map((name) => players.get(name));
+    renderReelRows(rows, reel.winnerIndex);
     const timeLeft = Math.max(0, state.pendingDraw.endAt - Date.now());
     window.setTimeout(() => finishDraw(winnerName), timeLeft);
   }
@@ -370,16 +380,32 @@
     startAnimation(winnerName);
   }
 
+  function showLastReel() {
+    const winnerName = state.history.at(-1);
+    if (!winnerName || !players.has(winnerName)) return;
+    if (!state.lastReel || state.lastReel.winnerName !== winnerName) {
+      const cycle = shuffled(state.originalGroup || [...selected]);
+      if (!cycle.length) return;
+      const rowCount = Math.max(42, cycle.length + 18);
+      const winnerIndex = rowCount - 10;
+      const winnerOffset = cycle.indexOf(winnerName);
+      const startOffset = (winnerOffset - winnerIndex % cycle.length + cycle.length) % cycle.length;
+      const names = Array.from({ length: rowCount }, (_, index) => cycle[(startOffset + index) % cycle.length]);
+      state.lastReel = { names, winnerIndex, winnerName };
+      saveState();
+    }
+    const rows = state.lastReel.names.map((name) => players.get(name));
+    renderReelRows(rows, state.lastReel.winnerIndex, false);
+  }
+
   function showDrawState() {
     renderHistory();
     updateDrawUI();
     updateSelectionPosition();
     if (state.pendingDraw) {
       startAnimation(state.pendingDraw.winnerName);
-    } else if (state.originalGroup !== null && state.remaining.length === 0) {
-      setPlaceholder('Everyone has been picked');
     } else if (state.history.length) {
-      setPlaceholder('Ready for the next name');
+      showLastReel();
     } else if (selected.size === 0) {
       setPlaceholder('Choose players to get started', true);
     } else {
@@ -394,6 +420,7 @@
     state.remaining = [];
     state.history = [];
     state.pendingDraw = null;
+    state.lastReel = null;
     saveState();
     if (els.track) {
       els.track.hidden = true;
@@ -476,6 +503,16 @@
     state.selected = [...selected];
     state.originalGroup = Array.isArray(saved.originalGroup) ? valid(saved.originalGroup) : null;
     state.history = valid(saved.history);
+    state.lastReel = saved.lastReel
+      && Array.isArray(saved.lastReel.names)
+      && saved.lastReel.names.length > 0
+      && saved.lastReel.names.every((name) => players.has(name))
+      && Number.isInteger(saved.lastReel.winnerIndex)
+      && saved.lastReel.winnerIndex >= 0
+      && saved.lastReel.winnerIndex < saved.lastReel.names.length
+      && players.has(saved.lastReel.winnerName)
+      ? saved.lastReel
+      : null;
     if (state.originalGroup !== null) {
       const drawn = new Set(state.history);
       state.remaining = Array.isArray(saved.remaining)
