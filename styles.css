@@ -128,7 +128,7 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .history-count { color: #85858d; font-size: 10px; }
 .history-list { display: flex; flex-wrap: nowrap; align-items: center; justify-content: flex-start; gap: 4px; overflow-x: auto; padding: 2px 0 4px; scrollbar-width: none; }
 .history-list::-webkit-scrollbar { display: none; }
-.history-empty { flex: 1 0 100%; padding: 3px 0; color: #777780; text-align: center; font-size: 11px; }
+.history-empty { display: flex; min-height: 30px; flex: 1 0 100%; align-items: center; justify-content: center; padding: 3px 0; color: #777780; text-align: center; font-size: 11px; }
 .history-chip { display: inline-flex; min-width: 0; align-items: center; gap: 4px; padding: 3px 6px; border: 1px solid #ffffff14; border-radius: 99px; background: #ffffff07; }
 .history-chip { flex: 0 0 auto; }
 .history-chip img { width: 24px; height: 24px; flex: 0 0 auto; object-fit: contain; }
