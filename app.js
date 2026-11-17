@@ -99,6 +99,26 @@
     return { name, avatar: data.avatar || name, icon: data.icon || fallbackPlayer.icon };
   }
 
+  function setPlaceholder(message, linkToGroup = false) {
+    if (!els.placeholder) return;
+    if (!linkToGroup) {
+      els.placeholder.textContent = message;
+      return;
+    }
+    const link = document.createElement('a');
+    link.className = 'group-picker-link';
+    link.href = 'group.html';
+    link.setAttribute('aria-label', `${message} — edit group`);
+    const text = document.createElement('span');
+    text.textContent = message;
+    const arrow = document.createElement('span');
+    arrow.className = 'group-picker-arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '→';
+    link.append(text, arrow);
+    els.placeholder.replaceChildren(link);
+  }
+
   function updateSelectionPosition() {
     if (!els.reel) return;
     const header = document.querySelector('.draw-topbar');
@@ -357,13 +377,13 @@
     if (state.pendingDraw) {
       startAnimation(state.pendingDraw.winnerName);
     } else if (state.originalGroup !== null && state.remaining.length === 0) {
-      els.placeholder.textContent = 'Everyone has been picked';
+      setPlaceholder('Everyone has been picked');
     } else if (state.history.length) {
-      els.placeholder.textContent = 'Ready for the next name';
+      setPlaceholder('Ready for the next name');
     } else if (selected.size === 0) {
-      els.placeholder.textContent = 'Choose players to get started';
+      setPlaceholder('Choose players to get started', true);
     } else {
-      els.placeholder.textContent = 'Tap Pick a name to begin';
+      setPlaceholder('Tap Pick a name to begin');
     }
   }
 
@@ -381,7 +401,7 @@
     }
     if (els.placeholder) {
       els.placeholder.hidden = false;
-      els.placeholder.textContent = 'Tap Pick a name to begin';
+      setPlaceholder('Tap Pick a name to begin');
     }
     if (els.history) renderHistory();
     if (els.list) {
