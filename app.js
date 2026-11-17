@@ -33,7 +33,6 @@
     draw: document.querySelector('#draw-button'),
     drawReset: document.querySelector('#draw-reset-button'),
     drawLabel: document.querySelector('#draw-button-label'),
-    drawStatus: document.querySelector('#draw-status'),
     drawGroupCount: document.querySelector('#draw-group-count'),
     reel: document.querySelector('#reel'),
     track: document.querySelector('#reel-track'),
@@ -235,7 +234,8 @@
     if (!els.history) return;
     els.history.replaceChildren();
     const drawnNames = state.history || [];
-    els.historyCount.textContent = `${drawnNames.length} picked`;
+    const totalNames = state.originalGroup === null ? selected.size : state.originalGroup.length;
+    els.historyCount.textContent = `${drawnNames.length}/${totalNames} picked`;
     if (!drawnNames.length) {
       const empty = document.createElement('span');
       empty.className = 'history-empty';
@@ -303,19 +303,6 @@
     state.pendingDraw = null;
     saveState();
     els.track.querySelector('.winner-row')?.classList.add('winner-reveal');
-    const left = state.remaining.length;
-    els.drawStatus.replaceChildren();
-    if (left === 0) {
-      els.drawStatus.textContent = `${winnerName} was the last name! Everyone has been picked.`;
-    } else {
-      const label = document.createElement('span');
-      label.textContent = 'Picked ';
-      const name = document.createElement('strong');
-      name.className = 'rainbow-text';
-      name.textContent = winnerName;
-      const rest = document.createTextNode(` · ${left} ${left === 1 ? 'name' : 'names'} left`);
-      els.drawStatus.append(label, name, rest);
-    }
     renderHistory();
     updateDrawUI();
     updateSelectionPosition();
@@ -358,7 +345,6 @@
     const winnerName = state.remaining[Math.floor(Math.random() * state.remaining.length)];
     state.pendingDraw = { winnerName, endAt: Date.now() + DRAW_DURATION };
     saveState();
-    els.drawStatus.textContent = 'The next name is…';
     updateDrawUI();
     updateSelectionPosition();
     startAnimation(winnerName);
@@ -367,23 +353,18 @@
   function showDrawState() {
     renderHistory();
     updateDrawUI();
+    updateSelectionPosition();
     if (state.pendingDraw) {
-      els.drawStatus.textContent = 'The next name is…';
       startAnimation(state.pendingDraw.winnerName);
     } else if (state.originalGroup !== null && state.remaining.length === 0) {
       els.placeholder.textContent = 'Everyone has been picked';
-      els.drawStatus.textContent = 'Everyone has been picked. Choose Start over to pick from this group again.';
     } else if (state.history.length) {
       els.placeholder.textContent = 'Ready for the next name';
-      els.drawStatus.textContent = `${state.history.length} picked · ${state.remaining.length} names left.`;
     } else if (selected.size === 0) {
       els.placeholder.textContent = 'Choose players to get started';
-      els.drawStatus.textContent = 'Select players on the group page to start picking.';
     } else {
       els.placeholder.textContent = 'Tap Pick a name to begin';
-      els.drawStatus.textContent = `${selected.size} players selected. Ready to pick.`;
     }
-    updateSelectionPosition();
   }
 
   function startOver() {
@@ -402,7 +383,6 @@
       els.placeholder.hidden = false;
       els.placeholder.textContent = 'Tap Pick a name to begin';
     }
-    if (els.drawStatus) els.drawStatus.textContent = 'Group restored. Ready when you are.';
     if (els.history) renderHistory();
     if (els.list) {
       renderPlayers();
