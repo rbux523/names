@@ -100,7 +100,7 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .selection-window { position: absolute; z-index: 2; top: var(--selection-center, 50%); right: 8px; left: 8px; height: 82px; border: 1px solid #ffffff36; border-radius: 17px; background: #ffffff10; box-shadow: inset 0 0 25px #ffffff08, 0 0 30px #a88cff12; transform: translateY(-50%); pointer-events: none; }
 .reel-row { display: flex; height: 82px; align-items: center; justify-content: center; gap: 10px; padding: 0 14px; font-size: clamp(28px, 8vw, 48px); font-weight: 850; letter-spacing: -.035em; }
 .reel-row img { width: 54px; height: 54px; flex: 0 0 auto; object-fit: contain; }
-.reel-row .rainbow-text { max-width: calc(100% - 68px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.reel-row .rainbow-text { max-width: calc(100% - 68px); overflow: hidden; animation-delay: var(--reel-rainbow-delay, 0s); text-overflow: ellipsis; white-space: nowrap; }
 .reel-row.winner-reveal { animation: picked-row-pop 1.6s cubic-bezier(.2,.8,.25,1); }
 @keyframes picked-row-pop {
   0%, 100% { transform: scale(1); }

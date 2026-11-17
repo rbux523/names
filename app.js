@@ -374,6 +374,7 @@
     if (!state.remaining.length) return;
     const winnerName = state.remaining[Math.floor(Math.random() * state.remaining.length)];
     state.pendingDraw = { winnerName, endAt: Date.now() + DRAW_DURATION };
+    els.reel.style.setProperty('--reel-rainbow-delay', `-${Math.random() * 8}s`);
     saveState();
     updateDrawUI();
     updateSelectionPosition();
