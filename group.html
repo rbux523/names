@@ -19,10 +19,14 @@
       </header>
 
       <p class="group-status" id="group-status" aria-live="polite">Select players to include in the picker.</p>
+      <button class="draw-button start-drawing-button" id="start-drawing" type="button" disabled>Start drawing</button>
       <section class="roster-panel" aria-labelledby="roster-title">
         <div class="roster-heading">
           <div><h2 id="roster-title">Selected players</h2><p>These players are in your group.</p></div>
-          <span class="count-badge" id="selected-count">0 selected</span>
+          <div class="selected-heading-actions">
+            <button class="secondary-button clear-selected-button" id="clear-all" type="button">Clear all</button>
+            <span class="count-badge" id="selected-count">0 selected</span>
+          </div>
         </div>
         <div class="player-list selected-list" id="selected-list" aria-label="Selected players"></div>
 
@@ -32,14 +36,13 @@
         </div>
         <div class="tools">
           <label class="search-wrap"><span class="sr-only">Search players</span><span class="search-icon" aria-hidden="true">⌕</span><input id="search-input" class="search-input" type="search" placeholder="Search players…" autocomplete="off"></label>
-          <div class="selection-tools"><button class="secondary-button" id="clear-all" type="button">Clear all</button></div>
         </div>
         <form class="add-form" id="add-form">
           <label class="sr-only" for="add-input">Add a player</label>
           <input class="add-input" id="add-input" type="text" maxlength="40" placeholder="New name" autocomplete="off">
           <button class="add-button" type="submit">＋ Add name</button>
         </form>
-        <div class="list-meta"><span>Choose Add to move a name into your group.</span><span>New players use the default icon</span></div>
+        <div class="list-meta"><span>Choose Add to move a name into your group.</span><span>New players get a random unused icon</span></div>
         <div class="player-list library-list" id="player-list" aria-label="Available players"></div>
         <p class="notice" id="group-notice">Your group is saved on this device. After picking starts, use Start over to restore the group and make edits.</p>
       </section>

@@ -3,6 +3,7 @@
   const DRAW_DURATION = 5000;
   const ROW_HEIGHT = 82;
   let ambientTimer = null;
+  let avatarIcons = [];
   const page = document.body.dataset.page;
   const players = new Map();
   let selected = new Set();
@@ -22,6 +23,7 @@
     selectedList: document.querySelector('#selected-list'),
     listCount: document.querySelector('#list-count'),
     selectedCount: document.querySelector('#selected-count'),
+    startDrawing: document.querySelector('#start-drawing'),
     search: document.querySelector('#search-input'),
     addForm: document.querySelector('#add-form'),
     addInput: document.querySelector('#add-input'),
@@ -158,6 +160,7 @@
     const availableCount = [...players.values()].filter((player) => !selected.has(player.name) && `${player.name} ${player.avatar}`.toLocaleLowerCase().includes(query)).length;
     els.selectedCount.textContent = `${selected.size} selected`;
     els.listCount.textContent = `${availableCount} available`;
+    if (els.startDrawing) els.startDrawing.disabled = selected.size === 0 || state.originalGroup !== null;
     setGroupControlsLocked(state.originalGroup !== null);
   }
 
@@ -425,6 +428,10 @@
       saveState();
       renderPlayers();
     });
+    els.startDrawing.addEventListener('click', () => {
+      if (!selected.size || state.originalGroup !== null) return;
+      window.location.href = 'index.html?start=1';
+    });
     els.addForm.addEventListener('submit', (event) => {
       event.preventDefault();
       const name = els.addInput.value.trim();
@@ -436,7 +443,15 @@
         renderPlayers();
         return;
       }
-      const player = createPlayer(name, fallbackPlayer);
+      const usedIcons = new Set([fallbackPlayer.icon, ...[...players.values()].map((player) => player.icon)]);
+      const availableIcons = avatarIcons.filter((icon) => !usedIcons.has(icon));
+      if (!availableIcons.length) {
+        els.groupStatus.textContent = 'No unused avatars remain in the icon library.';
+        return;
+      }
+      const icon = availableIcons[Math.floor(Math.random() * availableIcons.length)];
+      const avatar = icon.split('/').pop().replace(/\.svg$/i, '').replace(/-/g, ' ');
+      const player = createPlayer(name, { avatar, icon });
       players.set(name, player);
       state.customPlayers.push(player);
       selected.add(name);
@@ -481,6 +496,9 @@
       const response = await fetch('players.json', { cache: 'no-store' });
       if (!response.ok) throw new Error(`Could not load players.json (${response.status}).`);
       const data = await response.json();
+      const avatarResponse = await fetch('SVG/avatars.json', { cache: 'no-store' });
+      if (!avatarResponse.ok) throw new Error(`Could not load SVG/avatars.json (${avatarResponse.status}).`);
+      avatarIcons = await avatarResponse.json();
       fallbackPlayer = data.fallback || fallbackPlayer;
       Object.entries(data).forEach(([name, player]) => {
         if (name.toLocaleLowerCase() !== 'fallback') players.set(name, createPlayer(name, player || {}));
@@ -491,6 +509,10 @@
         document.querySelector('#draw-button').addEventListener('click', drawName);
         els.drawReset.addEventListener('click', startOver);
         showDrawState();
+        if (new URLSearchParams(window.location.search).get('start') === '1' && selected.size > 0) {
+          window.history.replaceState({}, '', window.location.pathname);
+          drawName();
+        }
       }
     } catch (error) {
       if (els.error) {

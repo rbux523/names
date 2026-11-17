@@ -139,6 +139,9 @@ button:disabled { cursor: not-allowed; opacity: .44; }
 .roster-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .roster-heading h2 { margin: 0; font-size: 18px; letter-spacing: -.025em; }
 .roster-heading p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+.selected-heading-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 7px; }
+.selected-heading-actions .clear-selected-button { height: 32px; min-height: 32px; padding: 5px 9px; font-size: 11px; }
+.start-drawing-button { width: 100%; min-height: 52px; margin: 0 0 14px; padding: 12px 20px; border-radius: 13px; font-size: 16px; }
 .library-divider { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; margin: 17px 0 12px; padding-top: 15px; border-top: 1px solid #ffffff18; }
 .library-divider h2 { margin: 0; font-size: 16px; letter-spacing: -.02em; }
 .library-divider p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
@@ -190,6 +193,8 @@ button:disabled { cursor: not-allowed; opacity: .44; }
   .group-topbar { gap: 6px; }
   .group-topbar .secondary-button, .group-topbar .reset-button { padding-inline: 9px; font-size: 11px; }
   .roster-panel { padding: 8px 0; }
+  .roster-heading { flex-wrap: wrap; }
+  .selected-heading-actions { margin-left: auto; }
   .player-list { gap: 6px; }
   .player-card { gap: 7px; padding: 8px 30px 8px 7px; }
   .avatar { width: 40px; height: 40px; }
